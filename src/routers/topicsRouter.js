@@ -23,7 +23,7 @@ router.post('/topics/create', auth, async (req, res) => {
 router.get('/topics/find/:id', async (req, res) => {
   try {
     const topic = await Topic.findById(req.params.id);
-    await topic.populate('posts').execPopulate();
+    await topic.populate('posts');
 
     const authors = await Promise.all(
       topic.posts.map(async (post) => {
@@ -42,8 +42,9 @@ router.get('/topics/find/:id', async (req, res) => {
 });
 
 //search for specific topic
-router.post('/topics/search', auth, async (req, res) => {
+router.post('/topics/search', async (req, res) => {
   try {
+    const user = await User.findById(req.session.userId);
     const topics = await Topic.find({});
     const searchTerms = req.body.search.toLowerCase().split(' ');
     const searchResults = [];
@@ -62,7 +63,7 @@ router.post('/topics/search', auth, async (req, res) => {
     const usernamesOnline = await whoIsOnline();
 
     res.render('home', {
-      user: req.user,
+      user: user || null,
       usernamesOnline,
       topics,
       searchResults,

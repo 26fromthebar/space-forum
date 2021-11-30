@@ -15,7 +15,7 @@ router.get('/', async (req, res) => {
   try {
     const topics = await fetchAllTopics(req, res);
     topics.forEach(async (topic) => {
-      await topic.populate('posts').execPopulate();
+      await topic.populate('posts');
       topic.postsNumber = topic.posts.length;
       await topic.save();
     });

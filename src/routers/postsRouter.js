@@ -20,7 +20,7 @@ router.post('/posts/create/:id', auth, async (req, res) => {
       relatedTopic: req.params.id,
     });
 
-    post.populate('owner').execPopulate();
+    await post.populate('owner');
     await post.save();
     res.redirect(`/topics/find/${req.params.id}`);
   } catch (e) {

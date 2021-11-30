@@ -33,7 +33,7 @@ router.post('/signup', async (req, res) => {
     req.session.userId = user._id;
     res.redirect('/');
   } catch (e) {
-    res.render('error', { user: req.user, errorMessage: e.message });
+    res.render('error', { user: null, errorMessage: e.message });
   }
 });
 
@@ -136,7 +136,10 @@ router.post(
       await req.user.save();
       res.redirect('/account');
     } catch (e) {
-      res.render('error', { user: req.user, errorMessage: e.message });
+      res.render('error', {
+        user: req.user,
+        errorMessage: 'Choose a valid file to upload',
+      });
     }
   }
 );
